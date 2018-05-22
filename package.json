@@ -1,0 +1,43 @@
+{
+  "name": "react-rx",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.js",
+    "start": "webpack-dev-server --content-base build --hot --inline",
+    "format": "prettier --single-quote --print-width 120 --trailing-comma all --write 'src/**/*.{ts,tsx}'",
+    "lint-staged": "lint-staged",
+    "lint-pass": "echo 'You are ready to commit!!!!'"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "empty": "^0.10.1",
+    "js-logger": "^1.4.1",
+    "lodash": "^4.17.10",
+    "page": "^1.8.6",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "rxjs": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^10.0.3",
+    "awesome-typescript-loader": "^5.0.0",
+    "fairybread": "^2.0.1",
+    "lint-staged": "^7.0.5",
+    "pre-commit": "^1.2.2",
+    "prettier": "^1.12.1",
+    "source-map-loader": "^0.2.3",
+    "typescript": "^2.8.3",
+    "webpack": "^4.6.0",
+    "webpack-dev-server": "^3.1.4"
+  },
+  "lint-staged": {
+    "{src/**/*.{ts,tsx}": [
+      "prettier --single-quote --print-width 120 --trailing-comma all --write",
+      "git add"
+    ]
+  }
+}
