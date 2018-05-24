@@ -19,7 +19,7 @@ export default function App({ currentPage, allItems, detail, loading }: State) {
   })(currentPage.name);
   return (
     <div className="App">
-      <h1>This is App!!!!!!</h1>
+      <h1>This is App!!!!!! {currentPage.name}</h1>
     </div>
   );
 }

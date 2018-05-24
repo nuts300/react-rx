@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { Observable, Subject, ReplaySubject, from, of, range, pipe, asyncScheduler } from 'rxjs';
-import { map, filter, merge } from 'rxjs/operators';
+import { Observable, Subject, ReplaySubject, from, of, range, pipe, asyncScheduler, merge } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
 import { scan, publishReplay, refCount } from 'rxjs/operators';
 
@@ -11,11 +11,16 @@ const logger = getLogger('domain/state');
 export function createState(reducer$, initialState = {}) {
   logger.debug('Create state');
   const source$ = of(initialState);
-  return source$.pipe(
-    merge(reducer$),
-    scan((state, reducer: Function) => reducer(state)),
+  const merged$ = merge(source$, reducer$);
+  merged$.pipe(
+    scan((state, reducer: Function) => {
+      logger.debug('Scan stream');
+      return reducer(state)
+    }, initialState),
     publishReplay(1)
   );
+
+  return source$;
 }
 
 export function subscribe(source$, render) {
