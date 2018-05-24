@@ -11,7 +11,12 @@ const logger = getLogger('domain/actions');
 
 function createAction(reducer: (State, Any?) => State | Promise<State>) {
   const subject$ = new Subject();
-  subject$.pipe(map(payload => _.partialRight(reducer, payload)));
+  subject$.subscribe({
+    next: payload => {
+      logger.debug('Watch action stream', payload);
+      return _.partialRight(reducer, payload);
+    }
+  });
   return subject$;
 }
 

@@ -1,5 +1,5 @@
-import { Observable, Subject, ReplaySubject, from, of, range, pipe, asyncScheduler, merge } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { Observable, Subject, ReplaySubject, from, of, range, pipe, asyncScheduler } from 'rxjs';
+import { map, filter, merge } from 'rxjs/operators';
 
 import { scan, publishReplay, refCount } from 'rxjs/operators';
 
@@ -9,13 +9,28 @@ const logger = getLogger('domain/state');
 
 export function createState(reducer$, initialState = {}) {
   logger.debug('Create state');
-  const source$ = of(initialState);
-  const merged$ = merge(source$, reducer$);
-  merged$.pipe(
-    scan((state, reducer: Function) => {
-      logger.debug('Scan stream');
-      return reducer(state)
-    })
+  const source$ = of(initialState).pipe(
+    map(x => {
+      logger.debug('Watch source stream', x);
+      return x;
+    }));
+  reducer$.pipe(
+    map(x => {
+      logger.debug('Watch reducer stream', x);
+      return x;
+    }));
+  // const merged$ = merge(source$, reducer$);
+  source$
+    .pipe(
+      merge(reducer$),
+      map(x => {
+        logger.debug('Watch merged stream', x);
+        return x;
+      }),
+      scan((state, reducer: Function) => {
+        logger.debug('Scan stream');
+        return reducer(state)
+      })
   );
 
   return source$;
