@@ -1,6 +1,6 @@
 import { getLogger } from 'utils/logger';
 
-const logger = getLogger('domain/middleware/network');
+const logger = getLogger('domain/state/reducer/network');
 
 export function getPokemonList(state) {
   logger.debug('start getPokemonList', state);
