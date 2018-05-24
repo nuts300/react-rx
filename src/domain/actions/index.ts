@@ -1,8 +1,8 @@
 import { State } from 'domain/state/definition';
 
 import _ from 'lodash';
-import { Subject, Observable, Observer, of }  from 'rxjs';
-import { map, merge } from 'rxjs/operators';
+import { Subject, Observable, Observer, of, merge }  from 'rxjs';
+import { map } from 'rxjs/operators';
 import { updateList, updateDetail } from 'domain/actions/pokemon';
 import { updatePage } from 'domain/actions/page';
 import { getLogger } from 'utils/logger';
@@ -13,9 +13,9 @@ const getPokemonDetailAction$ = new Subject();
 const getPokemonListAction$ = new Subject();
 const updateCurrentPageAction$ = new Subject();
 
-function createAction($subject, initialState, func) {
+function createAction($subject, func) {
   logger.debug('Create action');
-  const $action = of(initialState)
+  const $action = of(null)
     .pipe(map(payload => {
       logger.debug('Action map', payload);
       return _.partialRight(func, payload);
@@ -28,12 +28,11 @@ function createAction($subject, initialState, func) {
 
 export function actionStream(initialState): Observable<any> {
   logger.debug('Merge actions');
-  return  of(initialState)
-    .pipe(merge(
-      createAction(getPokemonDetailAction$, initialState, updateDetail),
-      createAction(getPokemonListAction$, initialState, updateList),
-      createAction(updateCurrentPageAction$, initialState, updatePage)
-    ));
+  return  merge(
+    createAction(getPokemonDetailAction$, updateDetail),
+    createAction(getPokemonListAction$, updateList),
+    createAction(updateCurrentPageAction$, updatePage)
+  );
 }
 
 export function getPokemonDetail(name: string): void {
