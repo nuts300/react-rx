@@ -10,4 +10,5 @@ logger.debug('Create root stream');
 const rootStream$ = createState(actionStream(), initialState);
 
 logger.debug('Start subscriber');
-subscribe(rootStream$, render);
+const source$ = subscribe(rootStream$, render);
+source$.next(initialState);
