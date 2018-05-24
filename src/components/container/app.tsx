@@ -16,7 +16,7 @@ export default function App({ currentPage, allItems, detail, loading }: State) {
       default:
         return <p>Page not found</p>;
     }
-  })(.name);
+  })(currentPage.name);
   return (
     <div className="App">
       <h1>This is App!!!!!!</h1>

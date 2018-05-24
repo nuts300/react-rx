@@ -1,12 +1,18 @@
 import { State } from 'domain/state/definition';
 
 import _ from 'lodash';
-import { Subject }  from 'rxjs';
+import { Subject, Observable, of }  from 'rxjs';
+import { map, merge } from 'rxjs/operators';
 import { updateList, updateDetail } from 'domain/actions/pokemon';
 import { updatePage } from 'domain/actions/page';
+import { getLogger } from 'utils/logger';
+
+const logger = getLogger('domain/actions');
 
 function createAction(reducer: (State, Any?) => State | Promise<State>) {
-  return new Subject().map(payload => _.partialRight(reducer, payload));
+  const subject$ = new Subject();
+  subject$.pipe(map(payload => _.partialRight(reducer, payload)));
+  return subject$;
 }
 
 const getPokemonDetailAction$ = createAction(updateList);
@@ -20,7 +26,8 @@ const actions = [
 ];
 
 export function actionStream() {
-  return new Subject().merge(...actions);
+  logger.debug('Merge actions');
+  return merge(...actions);
 }
 
 export function getPokemonDetail(name: string): void {
