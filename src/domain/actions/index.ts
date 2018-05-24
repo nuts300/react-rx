@@ -1,23 +1,36 @@
+import { State } from 'domain/state/definition';
+
 import _ from 'lodash';
 import { Subject }  from 'rxjs';
-import { getPokemonList, getPokemonDetailByName } from 'domain/state/reducer/network';
-import { updateCurrentpage } from 'domain/state/reducer';
+import { updateList, updateDetail } from 'domain/actions/pokemon';
+import { updatePage } from 'domain/actions/page';
 
-function createAction(reducer) {
+function createAction(reducer: (State, Any?) => State | Promise<State>) {
   return new Subject().map(payload => _.partialRight(reducer, payload));
 }
 
-const getPokemonDetailAction$ = createAction(getPokemonList);
-const getPokemonListAction$ = createAction(getPokemonDetailByName);
-const updateCurrentpageAction$ = createAction(updateCurrentpage);
+const getPokemonDetailAction$ = createAction(updateList);
+const getPokemonListAction$ = createAction(updateDetail);
+const updateCurrentPage$ = createAction(updatePage);
 
 const actions = [
   getPokemonDetailAction$,
   getPokemonListAction$,
-  updateCurrentpageAction$
+  updateCurrentPage$
 ];
 
 export function actionStream() {
   return new Subject().merge(...actions);
 }
 
+export function getPokemonDetail(name: string): void {
+  getPokemonDetailAction$.next(name);
+} 
+
+export function getPokemonList(): void {
+  getPokemonListAction$.next();
+}
+
+export function updateCurrentPage(name: string): void {
+  updateCurrentPage$.next(name);  
+}

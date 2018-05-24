@@ -1,8 +1,6 @@
-export type HomePage = { name: 'HOME_PAGE' };
+export type PageName = 'HOME_PAGE' | 'DETAIL_PAGE';
 
-export type DetailPage = { name: 'DETAIL_PAGE' };
-
-export type Page = HomePage | DetailPage;
+export type Page = { name: PageName }
 
 export type Item = { name: string; url: string };
 
