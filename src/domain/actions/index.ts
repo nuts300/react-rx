@@ -13,20 +13,16 @@ const getPokemonDetailAction$ = new Subject();
 const getPokemonListAction$ = new Subject();
 const updateCurrentPageAction$ = new Subject();
 
-function createAction($subject, func) {
+function createAction(subject$, func) {
   logger.debug('Create action');
-  const $action = of(null)
-    .pipe(map(payload => {
-      logger.debug('Action map', payload);
-      return _.partialRight(func, payload);
-    }));
-  $action.subscribe($subject);
-
-  return $action;
+  return subject$.pipe(map(payload => {
+    logger.debug('Action map', payload);
+    return _.partialRight(func, payload)
+  }));
 }
 
 
-export function actionStream(initialState): Observable<any> {
+export function actionStream(): Observable<any> {
   logger.debug('Merge actions');
   return  merge(
     createAction(getPokemonDetailAction$, updateDetail),

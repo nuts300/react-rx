@@ -8,7 +8,7 @@ import startRouters from 'domain/middleware/router';
 const logger = getLogger('index');
 
 logger.debug('Create root stream');
-const rootStream$ = createState(actionStream(initialState), initialState);
+const rootStream$ = createState(actionStream(), initialState);
 
 logger.debug('Start subscriber');
 const source$ = subscribe(rootStream$, render);
