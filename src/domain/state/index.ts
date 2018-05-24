@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { Observable, Subject, ReplaySubject, from, of, range, pipe, asyncScheduler, merge } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
@@ -16,8 +15,7 @@ export function createState(reducer$, initialState = {}) {
     scan((state, reducer: Function) => {
       logger.debug('Scan stream');
       return reducer(state)
-    }, initialState),
-    publishReplay(1)
+    })
   );
 
   return source$;
@@ -26,7 +24,7 @@ export function createState(reducer$, initialState = {}) {
 export function subscribe(source$, render) {
   return source$
     .subscribe(state => {
-      logger.debug('Start subscriber');
+      logger.debug('Subscribe state');
       window.setTimeout(function() {
         logger.debug('Render state');
         render(state);

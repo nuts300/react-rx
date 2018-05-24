@@ -1,8 +1,8 @@
 import { State } from 'domain/state/definition';
 
 import _ from 'lodash';
-import { Subject, Observable, of }  from 'rxjs';
-import { map, merge } from 'rxjs/operators';
+import { Subject, Observable, of, merge }  from 'rxjs';
+import { map } from 'rxjs/operators';
 import { updateList, updateDetail } from 'domain/actions/pokemon';
 import { updatePage } from 'domain/actions/page';
 import { getLogger } from 'utils/logger';
@@ -31,13 +31,16 @@ export function actionStream() {
 }
 
 export function getPokemonDetail(name: string): void {
+  logger.debug('getPokemonDetail', name);
   getPokemonDetailAction$.next(name);
 } 
 
 export function getPokemonList(): void {
+  logger.debug('getPokemonList');
   getPokemonListAction$.next();
 }
 
 export function updateCurrentPage(name: string): void {
+  logger.debug('updateCurrentPage', name);
   updateCurrentPage$.next(name);  
 }
