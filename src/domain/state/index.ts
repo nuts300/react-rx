@@ -1,13 +1,19 @@
 import _ from 'lodash';
-import { BehaviorSubject, Observable, Scheduler, of, merge, Subscriber }  from 'rxjs';
+import { Scheduler, of }  from 'rxjs';
 import { getLogger } from 'utils/logger';
 
 const logger = getLogger('domain/observable');
 
-function createState(reducer$, initialState = {}) {
+export function createState(reducer$, initialState = {}) {
   return of(initialState)
     .merge(reducer$)
     .scan((state, reducer) => reducer(state))
     .publishReplay(1)
     .refCount();
+}
+
+export function subscribe(source$, render) {
+  return source$
+    .subscribe(render)
+    .observeOn(Scheduler.async);
 }
