@@ -1,7 +1,7 @@
 import { State } from 'domain/state/definition';
 
 import _ from 'lodash';
-import { Subject, Observable, of }  from 'rxjs';
+import { Subject, Observable, Observer, of }  from 'rxjs';
 import { map, merge } from 'rxjs/operators';
 import { updateList, updateDetail } from 'domain/actions/pokemon';
 import { updatePage } from 'domain/actions/page';
@@ -13,41 +13,27 @@ const getPokemonDetailAction$ = new Subject();
 const getPokemonListAction$ = new Subject();
 const updateCurrentPageAction$ = new Subject();
 
-const actions = [
-  getPokemonDetailAction$,
-  getPokemonListAction$,
-  updateCurrentPageAction$
-];
-
-export function actionStream(initialState) {
-  logger.debug('Merge actions');
-  getPokemonListAction$.pipe(
-    map(x => {
-      logger.debug('getPokemonListAction map', x);
-      return x;
+function createAction($subject, initialState, func) {
+  logger.debug('Create action');
+  const $action = of(initialState)
+    .pipe(map(payload => {
+      logger.debug('Action map', payload);
+      return _.partialRight(func, payload);
     }));
-  return getPokemonListAction$.subscribe({
-    next: message => {
-      logger.debug('getPokemonListAction', message);
-      return message;
-    }
-  });
+  $action.subscribe($subject);
 
-  // return of(initialState)
-  //   .pipe(merge(
-  //     getPokemonDetailAction$.pipe(map(name => {
-  //       logger.debug('getPokemonDetailAction', name);
-  //       _.partialRight(updateDetail, name)
-  //     })),
-  //     getPokemonListAction$.pipe(map(() => {
-  //       logger.debug('getPokemonListAction', name);
-  //       return updateList
-  //     })),
-  //     updateCurrentPageAction$.pipe(map(name => {
-  //       logger.debug('updateCurrentPageAction', name);
-  //       return _.partialRight(updatePage, name)
-  //     }))
-  //   ));
+  return $action;
+}
+
+
+export function actionStream(initialState): Observable<any> {
+  logger.debug('Merge actions');
+  return  of(initialState)
+    .pipe(merge(
+      createAction(getPokemonDetailAction$, initialState, updateDetail),
+      createAction(getPokemonListAction$, initialState, updateList),
+      createAction(updateCurrentPageAction$, initialState, updatePage)
+    ));
 }
 
 export function getPokemonDetail(name: string): void {
