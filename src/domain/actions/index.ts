@@ -21,7 +21,6 @@ function createAction(subject$, func) {
   }));
 }
 
-
 export function actionStream(): Observable<any> {
   logger.debug('Merge actions');
   return  merge(

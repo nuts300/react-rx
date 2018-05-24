@@ -9,13 +9,8 @@ const logger = getLogger('domain/state');
 
 export function createState(reducer$, initialState = {}): Observable<any> {
   logger.debug('Create state');
-  const source$ = of(initialState).pipe(
-    map(x => {
-      logger.debug('Watch source stream', x);
-      return x;
-    }));
 
-  return merge(source$, reducer$)
+  return merge(of(initialState), reducer$)
     .pipe(
       map(x => {
         logger.debug('Watch merged stream', x);
