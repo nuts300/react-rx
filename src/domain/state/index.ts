@@ -20,7 +20,7 @@ export function createState(reducer$, initialState = {}): Observable<any> {
         logger.debug('Scan stream');
         logger.debug('Scan state', state);
         logger.debug('Scan reducer', reducer);
-        return reducer(state)
+        return reducer(state);
       })
   );
 }
@@ -30,7 +30,7 @@ export function subscribe(source$, render) {
     .subscribe(state => {
       logger.debug('Subscribe state');
       window.setTimeout(function() {
-        logger.debug('Render state');
+        logger.debug('Render', state);
         render(state);
       }, 0)
     });
