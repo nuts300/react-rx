@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export default function Detail({ detail, loading }: {
+export default function Detail({ detail }: {
   detail: {
     name: string;
     height: number;
@@ -8,8 +8,7 @@ export default function Detail({ detail, loading }: {
     sprites: {
       frontDefault: string;
     }
-  },
-  loading: boolean
+  }
 }) {
   return (
   <div>
@@ -26,12 +25,12 @@ export default function Detail({ detail, loading }: {
                   </thead>
                   <tbody>
                   {
-                      loading?
-                      <tr>
-                          <td>Now loading ...</td>
-                          <td></td>
-                          <td></td>
-                      </tr>:
+                    //   loading?
+                    //   <tr>
+                    //       <td>Now loading ...</td>
+                    //       <td></td>
+                    //       <td></td>
+                    //   </tr>:
                       <tr>
                           <td>{detail.name}</td>
                           <td>{detail.height}</td>
@@ -43,7 +42,7 @@ export default function Detail({ detail, loading }: {
           </div>
           <div className="column-sm-2">
           {
-              !loading  && detail.sprites &&
+            //   !loading  && detail.sprites &&
               <img src={ detail.sprites.frontDefault } alt={detail.name} />   
           }
           </div>
