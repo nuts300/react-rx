@@ -9,6 +9,7 @@ const logger = getLogger('renderer');
 
 export function render(state: State) {
   logger.time('DOM Render');
+  logger.debug('DOM Render state', state);
   ReactDOM.render(<App {...state} />, document.getElementById('app'));
   logger.timeEnd('DOM Rendered');
 }

@@ -3,7 +3,12 @@ import { State, PageName } from 'domain/state/definition';
 import List from 'components/presentational/list';
 import Detail from 'components/presentational/detail';
 
+import { getLogger } from 'utils/logger';
+
+const logger = getLogger('components/container/app');
+
 export default function App({ currentPage, allItems, detail, loading }: State) {
+  logger.debug('allItems', allItems, currentPage);
   const content = 
   (pageName => {
     switch (pageName) {
@@ -20,6 +25,7 @@ export default function App({ currentPage, allItems, detail, loading }: State) {
   return (
     <div className="App">
       <h1>This is App!!!!!! {currentPage.name}</h1>
+      {content}
     </div>
   );
 }

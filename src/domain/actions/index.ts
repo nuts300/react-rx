@@ -1,4 +1,4 @@
-import { State } from 'domain/state/definition';
+import { Item, DetailItem } from 'domain/state/definition';
 
 import _ from 'lodash';
 import { Subject, Observable, Observer, of, merge }  from 'rxjs';
@@ -9,9 +9,11 @@ import { getLogger } from 'utils/logger';
 
 const logger = getLogger('domain/actions');
 
-const getPokemonDetailAction$ = new Subject();
-const getPokemonListAction$ = new Subject();
-const updateCurrentPageAction$ = new Subject();
+const actions = {
+  updatePokemonDetail: new Subject(),
+  updatePokemonList: new Subject(),
+  updateCurrentPage: new Subject()
+}
 
 function createAction(subject$, func) {
   logger.debug('Create action');
@@ -24,23 +26,20 @@ function createAction(subject$, func) {
 export function actionStream(): Observable<any> {
   logger.debug('Merge actions');
   return  merge(
-    createAction(getPokemonDetailAction$, updateDetail),
-    createAction(getPokemonListAction$, updateList),
-    createAction(updateCurrentPageAction$, updatePage)
+    createAction(actions.updatePokemonDetail, updateDetail),
+    createAction(actions.updatePokemonList, updateList),
+    createAction(actions.updateCurrentPage, updatePage)
   );
 }
 
-export function getPokemonDetail(name: string): void {
-  logger.debug('getPokemonDetail', name);
-  getPokemonDetailAction$.next(name);
-} 
+export function updatePokemonDetail(detail: DetailItem) {
+  actions.updatePokemonDetail.next(detail);
+}
 
-export function getPokemonList(): void {
-  logger.debug('getPokemonList');
-  getPokemonListAction$.next('go!!');
+export function updatePokemonList(list: Array<Item>): void {
+  actions.updatePokemonList.next(list);
 }
 
 export function updateCurrentPage(name: string): void {
-  logger.debug('updateCurrentPage', name);
-  updateCurrentPageAction$.next(name);  
+  actions.updateCurrentPage.next({ name });
 }
