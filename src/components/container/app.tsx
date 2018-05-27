@@ -2,12 +2,14 @@ import * as React from 'react';
 import { State, PageName } from 'domain/store/state';
 import List from 'components/presentational/list';
 import Detail from 'components/presentational/detail';
+import { connect } from 'domain/store/connecter';
+import { store } from 'domain/store';
 
 import { getLogger } from 'utils/logger';
 
 const logger = getLogger('components/container/app');
 
-export default function App({ currentPage, allItems, detail }: State) {
+function App({ currentPage, allItems, detail }: State): JSX.Element {
   logger.debug('allItems', allItems, currentPage);
   const content = 
   (pageName => {
@@ -28,3 +30,9 @@ export default function App({ currentPage, allItems, detail }: State) {
     </div>
   );
 }
+
+export default connect({
+  detail: store.pokemonDetail$,
+  allItems: store.pokemonList$,
+  currentPage: store.currentPage$
+})(App);

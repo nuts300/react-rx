@@ -1,4 +1,5 @@
-import { BehaviorSubject } from 'rxjs';
+import reduce from 'lodash/reduce';
+import { BehaviorSubject, combineLatest } from 'rxjs';
 import { initialDetail, initialPage } from 'domain/store/state';
 
 import { getLogger } from 'utils/logger';
