@@ -6,29 +6,55 @@ import * as React from 'react';
 import { getLogger } from 'utils/logger';
 const logger = getLogger('domain/store/connecter');
 
+type WrapperProps = {
+  store: { [key: string]: BehaviorSubject<any> },
+  children: React.ReactElement<any>
+  
+}
+
+class Wrapper extends React.Component<WrapperProps,any,any> {
+  props: WrapperProps
+  state: object
+
+  constructor(props: WrapperProps) {
+    super(props);
+    this.state = {};
+  }
+
+  getChildContext() {
+    return this.state;
+  }
+
+  componentWillMount() {
+    forEach(this.props.store, (subject$, key) => {
+      subject$.subscribe(value => {
+        this.setState((state, props) => {
+          state[key] = value;
+          logger.debug('Updated state', state);
+          return state;
+        });
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    forEach(this.props.store, (subject$, key) => subject$.unsubscribe());
+  }
+  
+  render() {
+    logger.debug('Render Wrapper', this.state);
+    return this.props.children;
+  }
+}
+
+
 export function connect(store: { [key: string]: BehaviorSubject<any> }) {
   return function (WrappedComponent: React.ComponentClass<any> | React.StatelessComponent<any>)
-  :React.ComponentClass {
-    return class Wrapper extends React.Component<any,any,any> {
-      componentWillMount() {
-        forEach(store, (subject$, key) => {
-          subject$.subscribe(value => {
-            this.setState((prevState, props) => {
-              logger.debug('Update state', prevState, 'key', key, 'value', value);
-              return { ...prevState, ...{ key: value } };
-            });
-          });
-        });
-      }
-    
-      componentWillUnmount() {
-        forEach(store, (subject$, key) => subject$.unsubscribe());
-      }
-      
-      render() {
-        logger.debug('Render WrappedComponent', this.state);
-        return <WrappedComponent {...this.state} />
-      }
-    }
+  :JSX.Element {
+    return (
+      <Wrapper store={store}>
+        <WrappedComponent />
+      </Wrapper>
+    )
   }
 }
