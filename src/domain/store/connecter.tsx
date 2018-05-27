@@ -8,8 +8,8 @@ const logger = getLogger('domain/store/connecter');
 
 type WrapperProps = {
   store: { [key: string]: BehaviorSubject<any> },
-  children: React.ReactElement<any>
-  
+  children: React.ReactElement<any>,
+  context: React.Context<any> 
 }
 
 class Wrapper extends React.Component<WrapperProps,any,any> {
@@ -19,10 +19,6 @@ class Wrapper extends React.Component<WrapperProps,any,any> {
   constructor(props: WrapperProps) {
     super(props);
     this.state = {};
-  }
-
-  getChildContext() {
-    return this.state;
   }
 
   componentWillMount() {
@@ -43,7 +39,12 @@ class Wrapper extends React.Component<WrapperProps,any,any> {
   
   render() {
     logger.debug('Render Wrapper', this.state);
-    return this.props.children;
+    const { Provider } = this.props.context;
+    return (
+      <Provider value={this.state}>
+        {this.props.children}
+      </Provider>
+    )
   }
 }
 
@@ -51,9 +52,12 @@ class Wrapper extends React.Component<WrapperProps,any,any> {
 export function connect(store: { [key: string]: BehaviorSubject<any> }) {
   return function (WrappedComponent: React.ComponentClass<any> | React.StatelessComponent<any>)
   :JSX.Element {
+    const context = React.createContext({});
     return (
-      <Wrapper store={store}>
-        <WrappedComponent />
+      <Wrapper store={store} context={context}>
+        <context.Consumer>
+        { (state) => (<WrappedComponent {...state} />) }
+        </context.Consumer>
       </Wrapper>
     )
   }
