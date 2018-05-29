@@ -11,9 +11,10 @@ class Store<T> {
   action$: Subject<(T) => T>
   constructor(source: T) {
     this.action$ = new BehaviorSubject(state => state);
-    this.source$ = this.action$.pipe(
-      combineLatest(new BehaviorSubject(source)),
-      map(([reducer, source]) => {
+    const state$ = new BehaviorSubject(source);
+    this.source$ = state$.pipe(
+      combineLatest(this.action$),
+      map(([source, reducer]) => {
         logger.debug('Map!', source, reducer);
         return reducer(source);
       })
