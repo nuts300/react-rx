@@ -1,16 +1,13 @@
 import _ from 'lodash';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject, Observable } from 'rxjs';
+import { combineLatest, map } from 'rxjs/operators';
 
-import { Item, DetailItem, State, DetailItemFromNetwork } from 'domain/store/state';
+import { Item, DetailItem, State, DetailItemFromNetwork, PageName } from 'domain/store/state';
 import { store } from 'domain/store';
 import { getList, getDetailByName } from 'domain/network';
 
 import { getLogger } from 'utils/logger';
 const logger = getLogger('domain/actions');
-
-function dispatchAction<T>(subject$: BehaviorSubject<T>, data: T) {
-  subject$.next(data);
-}
 
 function camelCaseImageFront(detail: DetailItemFromNetwork): DetailItem {
   return {
@@ -24,16 +21,17 @@ function camelCaseImageFront(detail: DetailItemFromNetwork): DetailItem {
 export async function updatePokemonDetail(name: string): Promise<void> {
   const detail = await getDetailByName(name).then(camelCaseImageFront)
   logger.debug('updatePokemonDetail', detail);
-  dispatchAction(store.pokemonDetail$, detail);
+  store.pokemonDetail.dispatch(state => detail);
 }
 
 export async function updatePokemonList(): Promise<void> {
   const list = await getList();
   logger.debug('updatePokemonList', list);
-  dispatchAction(store.pokemonList$, list);
+  store.pokemonList.dispatch(state => list);
 }
 
-export function updateCurrentPage(name: string): void {
+export function updateCurrentPage(name: PageName): void {
   logger.debug('updateCurrentPage', name);
-  dispatchAction(store.currentPage$, { name });
+  const page = { name };
+  store.currentPage.dispatch(state => page);
 }

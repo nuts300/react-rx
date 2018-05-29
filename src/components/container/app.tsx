@@ -32,7 +32,7 @@ function App({ currentPage, allItems, detail }: State): JSX.Element {
 }
 
 export default connect({
-  detail: store.pokemonDetail$,
-  allItems: store.pokemonList$,
-  currentPage: store.currentPage$
+  detail: store.pokemonDetail.source$,
+  allItems: store.pokemonList.source$,
+  currentPage: store.currentPage.source$
 })(App);

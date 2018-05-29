@@ -1,13 +1,13 @@
 import forEach from 'lodash/forEach';
 import reduce from 'lodash/reduce';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription, Observable } from 'rxjs';
 import * as React from 'react';
 
 import { getLogger } from 'utils/logger';
 const logger = getLogger('domain/store/connecter');
 
 type WrapperProps = {
-  store: { [key: string]: BehaviorSubject<any> },
+  store: { [key: string]: Observable<any> },
   children: React.ReactElement<any>,
   context: React.Context<any> 
 }
@@ -22,8 +22,8 @@ class Wrapper extends React.Component<WrapperProps,any,any> {
   }
 
   componentWillMount() {
-    forEach(this.props.store, (subject$, key) => {
-      subject$.subscribe(value => {
+    forEach(this.props.store, (observable: Observable<any>, key) => {
+      observable.subscribe(value => {
         this.setState((state, props) => {
           state[key] = value;
           logger.debug('Updated state', state);
@@ -49,7 +49,7 @@ class Wrapper extends React.Component<WrapperProps,any,any> {
 }
 
 
-export function connect(store: { [key: string]: BehaviorSubject<any> }) {
+export function connect(store: { [key: string]: Observable<any> }) {
   return function (WrappedComponent: React.ComponentClass<any> | React.StatelessComponent<any>)
   :JSX.Element {
     const context = React.createContext({});
