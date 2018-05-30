@@ -6,17 +6,17 @@ import * as React from 'react';
 import { getLogger } from 'utils/logger';
 const logger = getLogger('domain/store/connecter');
 
-type WrapperProps = {
-  store: { [key: string]: Observable<any> },
+type WrapperProps<T> = {
+  store: { [P in keyof T]: Observable<T[P]> },
   children: React.ReactElement<any>,
   context: React.Context<any> 
 }
 
-class Wrapper extends React.Component<WrapperProps,any,any> {
-  props: WrapperProps
+class Wrapper<T> extends React.Component<WrapperProps<T>,any,any> {
+  props: WrapperProps<T>
   state: object
 
-  constructor(props: WrapperProps) {
+  constructor(props: WrapperProps<T>) {
     super(props);
     this.state = {};
   }
@@ -48,7 +48,7 @@ class Wrapper extends React.Component<WrapperProps,any,any> {
   }
 }
 
-export function connect<T>(store: { [P in keyof T]: Observable<any> }) {
+export function connect<T>(store: { [P in keyof T]: Observable<T[P]> }) {
   return function (WrappedComponent: React.ComponentClass<T> | React.StatelessComponent<T>)
   :JSX.Element {
     const context = React.createContext({});
