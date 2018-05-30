@@ -31,8 +31,8 @@ function App({ currentPage, allItems, detail }: State): JSX.Element {
   );
 }
 
-export default connect({
+export default connect(App)({
   detail: store.pokemonDetail.source$,
   allItems: store.pokemonList.source$,
   currentPage: store.currentPage.source$
-})(App);
+});
