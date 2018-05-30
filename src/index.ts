@@ -1,16 +1,11 @@
-import { createState, subscribe } from 'domain/state';
-import { actionStream } from 'domain/actions';
-import { initialState } from 'domain/state/definition';
 import { render } from 'renderer';
 import { getLogger } from 'utils/logger';
-import startRouters from 'domain/middleware/router';
+import startRouters from 'domain/router';
 
 const logger = getLogger('index');
 
-logger.debug('Create root stream');
-const rootStream$ = createState(actionStream(), initialState);
+logger.debug('Start render');
+render();
 
-logger.debug('Start subscriber');
-const source$ = subscribe(rootStream$, render);
-
+logger.debug('Start router');
 startRouters();

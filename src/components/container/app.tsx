@@ -1,23 +1,24 @@
 import * as React from 'react';
-import { State, PageName } from 'domain/state/definition';
+import { State, PageName } from 'domain/store/state';
 import List from 'components/presentational/list';
 import Detail from 'components/presentational/detail';
+import { connect } from 'domain/store/connector';
+import { store } from 'domain/store';
 
 import { getLogger } from 'utils/logger';
 
 const logger = getLogger('components/container/app');
 
-export default function App({ currentPage, allItems, detail, loading }: State) {
+function App({ currentPage, allItems, detail }: State): JSX.Element {
   logger.debug('allItems', allItems, currentPage);
   const content = 
   (pageName => {
     switch (pageName) {
       case 'HOME_PAGE':
         return <List
-          list={allItems}
-          loading={loading} />;
+          list={allItems} />;
       case 'DETAIL_PAGE':
-        return <Detail detail={detail} loading={loading}/>;
+        return <Detail detail={detail} />;
       default:
         return <p>Page not found</p>;
     }
@@ -29,3 +30,9 @@ export default function App({ currentPage, allItems, detail, loading }: State) {
     </div>
   );
 }
+
+export default connect(App)({
+  detail: store.pokemonDetail.source$,
+  allItems: store.pokemonList.source$,
+  currentPage: store.currentPage.source$
+});

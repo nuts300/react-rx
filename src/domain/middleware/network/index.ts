@@ -1,6 +1,5 @@
 import { getLogger } from 'utils/logger';
-import { State, Item, DetailItemFromNetwork, DetailItem } from 'domain/state/definition';
-import { updatePokemonDetail, updatePokemonList } from 'domain/actions';
+import { Item, DetailItemFromNetwork } from 'domain/store/state';
 
 type Pokemon = { pokemon: { pokemon: { name: string; url: string } }[] };
 
@@ -27,23 +26,4 @@ export async function getDetailByName(name: string): Promise<DetailItemFromNetwo
   if (resp.ok) {
     return resp.json();
   } else throw new TypeError('getDetailByName response is not Ok');
-}
-
-function camelCaseImageFront(detail: DetailItemFromNetwork): DetailItem {
-  return {
-    ...detail,
-    sprites: {
-      frontDefault: detail.sprites.front_default
-    }
-  };
-}
-
-export function onListFromNetwork(list: Array<Item>) {
-  logger.debug('List from network');
-  updatePokemonList(list);
-}
-
-export function onDetailFromNetwork(detail: DetailItemFromNetwork) {
-  logger.debug('Detail from network');
-  updatePokemonDetail(camelCaseImageFront(detail));
 }

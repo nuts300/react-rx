@@ -25,24 +25,26 @@ export type DetailItemFromNetwork = {
 export type State = {
   currentPage: Page;
   allItems: Array<Item>;
-  filteredItems: Array<Item>;
   detail: DetailItem;
-  shadowColor: string;
-  loading: boolean;
 };
 
+export const initialDetail: DetailItem = {
+  name: '',
+  height: 0,
+  weight: 0,
+  sprites: {
+    frontDefault: ''
+  }
+}
+
+export const initialPage: Page = {
+  name: 'HOME_PAGE'
+}
+
+export const initialAllItems: Item[] = [];
+
 export const initialState: State = {
-  currentPage: { name: 'HOME_PAGE' },
-  allItems: [],
-  filteredItems: [],
-  detail: {
-    name: '',
-    height: 0,
-    weight: 0,
-    sprites: {
-      frontDefault: ''
-    }
-  },
-  shadowColor: '#000',
-  loading: true
+  currentPage: initialPage,
+  allItems: initialAllItems,
+  detail: initialDetail
 };

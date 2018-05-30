@@ -1,9 +1,8 @@
 import * as React from 'react';
 import PokemonItem from 'components/presentational/pokemon_item';
 
-export default function List({ list, loading }: {
+export default function List({ list }: {
   list: Array<{ name: string; url: string }>
-  loading: boolean
 }) {
   const contents = list.map((v, index) => <PokemonItem key={index} {...v} />);
   return (

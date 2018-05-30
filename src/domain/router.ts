@@ -1,8 +1,8 @@
 import page from 'page';
 
 import { getLogger } from 'utils/logger';
-import { getList, getDetailByName, onListFromNetwork, onDetailFromNetwork } from 'domain/middleware/network';
-import { updateCurrentPage } from 'domain/actions';
+import { updatePokemonDetail, updatePokemonList } from 'domain/middleware/pokemon';
+import { updateCurrentPage } from 'domain/middleware/current_page';
 
 type Context = { params: { name: string } };
 type OnRoute = (ctx: Context) => void;
@@ -23,13 +23,13 @@ export default function startRouters() {
   detailRouter((ctx: Context) => {
     logger.debug('Detail route');
     const name = ctx.params.name;
-    getDetailByName(name).then(onDetailFromNetwork);
+    updatePokemonDetail(name);
     updateCurrentPage('DETAIL_PAGE');
   });
 
   homeRouter(ctx => {
     logger.debug('Home route');
-    getList().then(onListFromNetwork);
+    updatePokemonList();
     updateCurrentPage('HOME_PAGE');
   });
   page();
