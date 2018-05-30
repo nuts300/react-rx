@@ -1,7 +1,8 @@
 import page from 'page';
 
 import { getLogger } from 'utils/logger';
-import { updateCurrentPage, updatePokemonDetail, updatePokemonList } from 'domain/actions';
+import { updatePokemonDetail, updatePokemonList } from 'domain/middleware/pokemon';
+import { updateCurrentPage } from 'domain/middleware/current_page';
 
 type Context = { params: { name: string } };
 type OnRoute = (ctx: Context) => void;

@@ -1,6 +1,5 @@
 import { getLogger } from 'utils/logger';
-import { State, Item, DetailItemFromNetwork, DetailItem } from 'domain/store/state';
-import { updatePokemonDetail, updatePokemonList } from 'domain/actions';
+import { Item, DetailItemFromNetwork } from 'domain/store/state';
 
 type Pokemon = { pokemon: { pokemon: { name: string; url: string } }[] };
 

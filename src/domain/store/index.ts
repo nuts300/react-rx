@@ -6,7 +6,7 @@ import { initialDetail, initialPage } from 'domain/store/state';
 import { getLogger } from 'utils/logger';
 const logger = getLogger('domain/state');
 
-export class Store<T> {
+class State<T> {
   source$: Observable<T>
   action$: Subject<(T) => T>
   constructor(source: T) {
@@ -27,7 +27,7 @@ export class Store<T> {
 }
 
 export const store = {
-  pokemonDetail: new Store(initialDetail),
-  pokemonList: new Store([]),
-  currentPage: new Store(initialPage)
+  pokemonDetail: new State(initialDetail),
+  pokemonList: new State([]),
+  currentPage: new State(initialPage)
 }
