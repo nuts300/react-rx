@@ -48,8 +48,8 @@ class Wrapper<T> extends React.Component<WrapperProps<T>,any,any> {
   }
 }
 
-export function connect<T>(store: { [P in keyof T]: Observable<T[P]> }) {
-  return function (WrappedComponent: React.ComponentClass<T> | React.StatelessComponent<T>)
+export function connect<T>(WrappedComponent: React.ComponentClass<T> | React.StatelessComponent<T>) {
+  return function (store: { [P in keyof T]: Observable<T[P]> })
   :JSX.Element {
     const context = React.createContext({});
     return (
