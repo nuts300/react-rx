@@ -6,7 +6,7 @@ import { initialDetail, initialPage, initialAllItems } from 'domain/store/state'
 import { getLogger } from 'utils/logger';
 const logger = getLogger('domain/state');
 
-class State<T> {
+class Stream<T> {
   source$: Observable<T>
   action$: Subject<(T) => T>
   constructor(source: T) {
@@ -27,7 +27,7 @@ class State<T> {
 }
 
 export const store = {
-  pokemonDetail: new State(initialDetail),
-  pokemonList: new State(initialAllItems),
-  currentPage: new State(initialPage)
+  pokemonDetail: new Stream(initialDetail),
+  pokemonList: new Stream(initialAllItems),
+  currentPage: new Stream(initialPage)
 }
