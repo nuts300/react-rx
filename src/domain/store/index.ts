@@ -6,7 +6,7 @@ import { initialDetail, initialPage } from 'domain/store/state';
 import { getLogger } from 'utils/logger';
 const logger = getLogger('domain/state');
 
-class Store<T> {
+export class Store<T> {
   source$: Observable<T>
   action$: Subject<(T) => T>
   constructor(source: T) {
