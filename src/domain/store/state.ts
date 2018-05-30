@@ -41,8 +41,10 @@ export const initialPage: Page = {
   name: 'HOME_PAGE'
 }
 
+export const initialAllItems: Item[] = [];
+
 export const initialState: State = {
   currentPage: initialPage,
-  allItems: [],
+  allItems: initialAllItems,
   detail: initialDetail
 };

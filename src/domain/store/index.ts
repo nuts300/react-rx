@@ -1,7 +1,7 @@
 import reduce from 'lodash/reduce';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map, combineLatest } from 'rxjs/operators';
-import { initialDetail, initialPage } from 'domain/store/state';
+import { initialDetail, initialPage, initialAllItems } from 'domain/store/state';
 
 import { getLogger } from 'utils/logger';
 const logger = getLogger('domain/state');
@@ -21,13 +21,13 @@ class State<T> {
     );
   }
 
-  dispatch(reducer: (T) => T): void {
+  dispatch(reducer: (state: T) => T): void {
     this.action$.next(reducer);
   }
 }
 
 export const store = {
   pokemonDetail: new State(initialDetail),
-  pokemonList: new State([]),
+  pokemonList: new State(initialAllItems),
   currentPage: new State(initialPage)
 }
