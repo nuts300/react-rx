@@ -1,8 +1,8 @@
 import { Item, DetailItem, State, DetailItemFromNetwork, PageName } from 'domain/store/state';
 import { store } from 'domain/store';
-import { getList, getDetailByName } from 'domain/network';
-import { updatePokemon } from 'domain/store/reducers/pokemon_detail';
-import { updateList } from 'domain/store/reducers/pokemon_list';
+import { getList, getDetailByName } from 'domain/middleware/network';
+import { updatePokemon } from 'domain/middleware/reducers/pokemon_detail';
+import { updateList } from 'domain/middleware/reducers/pokemon_list';
 
 import { getLogger } from 'utils/logger';
 const logger = getLogger('domain/actions');

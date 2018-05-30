@@ -1,6 +1,6 @@
 import { render } from 'renderer';
 import { getLogger } from 'utils/logger';
-import startRouters from 'domain/middleware/router';
+import startRouters from 'domain/router';
 
 const logger = getLogger('index');
 

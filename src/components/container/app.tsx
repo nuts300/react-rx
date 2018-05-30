@@ -2,7 +2,7 @@ import * as React from 'react';
 import { State, PageName } from 'domain/store/state';
 import List from 'components/presentational/list';
 import Detail from 'components/presentational/detail';
-import { connect } from 'domain/store/connecter';
+import { connect } from 'domain/store/connector';
 import { store } from 'domain/store';
 
 import { getLogger } from 'utils/logger';
